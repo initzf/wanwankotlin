@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+
+        <variable
+            name="ktxActivity"
+            type="com.example.kotlinxc.KtxActivity"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btnInsertSp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->ktxActivity.insertSp()}"
+            android:text="写入SP"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <Button
+            android:id="@+id/btnReadSp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->ktxActivity.readSp()}"
+            android:text="读取SP"
+            app:layout_constraintLeft_toRightOf="@+id/btnInsertSp"/>
+
+
+        <Button
+            android:id="@+id/tvTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->ktxActivity.testOther()}"
+            android:text="测试other"
+            android:textAllCaps="false"
+            app:layout_constraintTop_toBottomOf="@+id/btnInsertSp"/>
+
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
