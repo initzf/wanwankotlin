@@ -49,4 +49,6 @@ dependencies {
 
     // Android KTX for framework API
     implementation 'androidx.core:core-ktx:0.1'
+
+    implementation project(":testmodule")
 }

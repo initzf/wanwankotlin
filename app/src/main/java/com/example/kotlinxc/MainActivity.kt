@@ -8,8 +8,9 @@ import android.util.Log
 import com.example.kotlinxc.bean.UserInfoEntity
 import com.example.kotlinxc.databinding.ActivityMainBinding
 import com.example.kotlinxc.tools.ApiService
+import com.example.kotlinxc.tools.ExecutorTool
 import com.google.gson.Gson
-import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -30,16 +31,36 @@ class MainActivity : AppCompatActivity() {
 
         mainBind?.mainActivity = this
 
-        runBlocking {
+        /*runBlocking {
 
             var obj1 = async { getUserInfo2() }.await()
 
             say("runBlocking 中")
 
             mainBind?.name = obj1.name
+        }*/
+
+
+
+        runBlocking {
+
+            var instance = object : ExecutorTool<UserInfoEntity>() {
+                override fun onSyncResponse(obj1: UserInfoEntity?) {
+                    say("runBlocking 中")
+
+                    mainBind?.name = obj1?.name
+                }
+            }
+
+            launch {
+
+                say("runBlocking  launch 中")
+
+                instance.asyncResponse(getUserInfo2())
+            }
         }
 
-        Log.i(TAG, "代码会依次从上往下执行， 这个代码会在 runBlocking 协程 结束后调用 ")
+        Log.i(TAG, "代码在async 协程下 会依次从上往下执行， 这个代码会在 runBlocking   await() 后调用 ")
     }
 
 

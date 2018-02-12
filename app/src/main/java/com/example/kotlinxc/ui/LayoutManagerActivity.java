@@ -3,12 +3,14 @@ package com.example.kotlinxc.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.example.kotlinxc.R;
 import com.example.kotlinxc.adapter.LayoutManagerAdapter;
+import com.example.kotlinxc.bean.ItemHeaderBean;
 import com.example.kotlinxc.widget.MyItemDivider;
-import com.example.kotlinxc.widget.MyLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +33,21 @@ public class LayoutManagerActivity extends AppCompatActivity {
 
         //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        mRecyclerView.addItemDecoration(new MyItemDivider(this));
-        mRecyclerView.setLayoutManager(new MyLayoutManager());
+        mRecyclerView.addItemDecoration(new MyItemDivider(this, new MyItemDivider.CallBackDataListener() {
+            @Override
+            public ItemHeaderBean onCallBack(int position) {
+
+                int groupId = position / 3;
+                int index = position % 3;
+
+                ItemHeaderBean headerBean = new ItemHeaderBean(groupId, groupId + "");
+                headerBean.setmGroupLength(3);
+                headerBean.setPosition(index);
+                return headerBean;
+            }
+        }));
+        //mRecyclerView.setLayoutManager(new MyLayoutManager());
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         LayoutManagerAdapter adapter = new LayoutManagerAdapter();
 
@@ -47,8 +62,9 @@ public class LayoutManagerActivity extends AppCompatActivity {
         for (char a = 'A'; a <= 'Z'; a++) {
             lists.add(String.valueOf(a));
         }
+
+        Log.i("x", "getData: " + lists.size());
+
         return lists;
     }
-
-
 }

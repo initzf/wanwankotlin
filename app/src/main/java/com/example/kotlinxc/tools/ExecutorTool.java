@@ -1,9 +1,5 @@
 package com.example.kotlinxc.tools;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.support.annotation.NonNull;
-
 import java.util.concurrent.Executor;
 
 /**
@@ -15,28 +11,19 @@ public abstract class ExecutorTool<T> implements OnResponseListener<T> {
     private Executor mExecutor;
 
     public ExecutorTool() {
-
-        final Handler mHandler = new Handler(Looper.getMainLooper());
-
-        mExecutor = new Executor() {
-            @Override
-            public void execute(@NonNull Runnable command) {
-                mHandler.post(command);
-            }
-        };
+        mExecutor = AppExecutors.getInstance().getMainThread();
     }
 
     @Override
-    public void response(final T data) {
+    public void asyncResponse(final T data) {
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
-
-                onResponseListener(data);
+                onSyncResponse(data);
             }
         });
     }
 
-    public abstract void onResponseListener(T t);
+    public abstract void onSyncResponse(T t);
 
 }

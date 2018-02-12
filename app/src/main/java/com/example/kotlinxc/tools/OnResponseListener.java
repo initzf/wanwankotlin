@@ -5,5 +5,5 @@ package com.example.kotlinxc.tools;
  */
 
 public interface OnResponseListener<T> {
-    void response(T data);
+    void asyncResponse(T data);
 }

@@ -3,10 +3,12 @@ package com.example.kotlinxc;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kotlinxc.bean.UserInfoEntity;
 import com.example.kotlinxc.tools.ApiService;
+import com.example.kotlinxc.tools.AppExecutors;
 import com.example.kotlinxc.tools.ExecutorTool;
 import com.google.gson.Gson;
 
@@ -21,40 +23,43 @@ public class JavaActivity extends AppCompatActivity {
 
     ExecutorTool executorTool;
 
+    TextView mTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_java);
 
+        mTextView = findViewById(R.id.tvShowContent);
 
         String msg = getIntent().getStringExtra("msg");
 
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(this, "接收到值:" + msg, Toast.LENGTH_SHORT).show();
 
         getData();
 
         executorTool = new ExecutorTool<UserInfoEntity>() {
             @Override
-            public void onResponseListener(UserInfoEntity userInfoEntity) {
-                Log.i(TAG, "onResponseListener: " + userInfoEntity.getName());
+            public void onSyncResponse(UserInfoEntity userInfoEntity) {
+                Log.i(TAG, "onResponseListener: " + userInfoEntity.getName() + "-----" + Thread.currentThread().getName());
+
+                mTextView.setText(userInfoEntity.getName());
             }
         };
     }
 
     private void getData() {
-        new Thread(new Runnable() {
+
+        AppExecutors.getInstance().getNetworkIO().execute(new Runnable() {
             @Override
             public void run() {
-
                 String json = new Tools().getUserInfo();
 
                 UserInfoEntity userInfoEntity = new Gson().fromJson(json, UserInfoEntity.class);
 
-                executorTool.onResponseListener(userInfoEntity);
-
+                executorTool.asyncResponse(userInfoEntity);
             }
-        }).start();
+        });
     }
 
 

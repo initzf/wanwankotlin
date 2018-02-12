@@ -37,7 +37,6 @@ public class LaunchRecyclerAdapter extends DataBoundBaseAdapter<ToolEntity, Item
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(itemView.getContext(), item.clazz);
                 itemView.getContext().startActivity(intent);
             }
